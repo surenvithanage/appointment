@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link th:href="@{css/report.css}" rel="stylesheet" type="text/css" media="all"/>
+    <script>
+        $(document).ready(function () {
+            $('#printInvoice').click(function () {
+                Popup($('.invoice')[0].outerHTML);
+
+                function Popup(data) {
+                    window.print();
+                    return true;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="invoice">
+    <div class="toolbar hidden-print">
+        <div class="text-right">
+            <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>
+        </div>
+        <hr>
+    </div>
+    <div class="invoice overflow-auto">
+        <div style="min-width: 600px">
+            <header>
+                <div class="row">
+                    <div class="col">
+                        <a target="_blank" href="report">
+                            Mercy Care Labs
+                        </a>
+                    </div>
+                    <div class="col company-details">
+                        <h2 class="name">
+                            <a target="_blank" href="report">
+                                Mercy Care Labs
+                            </a>
+                        </h2>
+                        <div>455 Foggy Heights, AZ 85004, US</div>
+                        <div>(123) 456-789</div>
+                        <div>mercycarelabs@gmail.com</div>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <div class="row contacts">
+                    <div class="col invoice-to">
+                        <div class="text-gray-light">INVOICE TO:</div>
+                        <h2 class="to" th:text="${user.fname}"></h2>
+                        <div class="address" th:text="${user.address}"></div>
+                        <div class="email" th:text="${user.email}"></div>
+                    </div>
+                    <div class="col invoice-details">
+                        <h1 class="invoice-id">INVOICE 3-2-1</h1>
+                        <div class="date">Date of Invoice: 01/10/2018</div>
+                        <div class="date">Due Date: 30/10/2018</div>
+                    </div>
+                </div>
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="text-left">TEST</th>
+                        <th class="text-right">RESULT</th>
+                        <th class="text-right">FLAG</th>
+                        <th class="text-right">REFERENCE VALUE</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="no">01</td>
+                        <td class="text-left">CHOLESTEROL</td>
+                        <td class="unit" th:text="${report.cholesterol}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">140.0-239.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">02</td>
+                        <td class="text-left">TRIGLYCERIDES</td>
+                        <td class="unit" th:text="${report.triglycerides}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">10.0-200.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">03</td>
+                        <td class="text-left">CHOLESTEROL-H.D.L</td>
+                        <td class="unit" th:text="${report.cholesterol_hdl}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">35.0-85.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">04</td>
+                        <td class="text-left">CHOLESTEROL-NON-H.D.L</td>
+                        <td class="unit" th:text="${report.cholesterol_non_hdl}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">55.0-189.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">05</td>
+                        <td class="text-left">CHOLESTEROL L.D.L</td>
+                        <td class="unit" th:text="${report.cholesterol_ldl}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">75.0-159.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">06</td>
+                        <td class="text-left">CHOLESTEROL - VLDL</td>
+                        <td class="unit" th:text="${report.cholesterol_vldl}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">10.0-41.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">07</td>
+                        <td class="text-left">CHOL / HDL</td>
+                        <td class="unit" th:text="${report.chol_hdl}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">2.0-5.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">08</td>
+                        <td class="text-left">LDL / HDL</td>
+                        <td class="unit" th:text="${report.ldl_hdl}"></td>
+                        <td class="qty">mg/dL</td>
+                        <td class="total">0.01-3.30</td>
+                    </tr>
+                    <tr>
+                        <td class="no">09</td>
+                        <td class="text-left">Sugar</td>
+                        <td class="unit" th:text="${report.sugar}"></td>
+                        <td class="qty">--</td>
+                        <td class="total">55.0-185.0</td>
+                    </tr>
+                    <tr>
+                        <td class="no">10</td>
+                        <td class="text-left">Pressure</td>
+                        <td class="unit" th:text="${report.pressure}"></td>
+                        <td class="qty">--</td>
+                        <td class="total">67.6-150.5</td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <div class="thanks">Thank you!</div>
+                <div class="notices">
+                    <div>NOTICE:</div>
+                    <div class="notice">Machine generated invoice.</div>
+                </div>
+            </main>
+            <footer>
+                Invoice was created on a computer and is valid without the signature and seal.
+            </footer>
+        </div>
+        <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+        <div></div>
+    </div>
+</div>
+</body>
+</html>

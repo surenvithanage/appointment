@@ -3,18 +3,21 @@ package com.web.assignment.appointment.controller.index;
 import com.google.gson.Gson;
 import com.web.assignment.appointment.dto.AppointmentDto;
 import com.web.assignment.appointment.dto.UserDto;
-import com.web.assignment.appointment.mapping.Appointment;
 import com.web.assignment.appointment.mapping.AppointmentType;
+import com.web.assignment.appointment.mapping.Report;
 import com.web.assignment.appointment.mapping.User;
 import com.web.assignment.appointment.repository.appointment.AppointmentTypeRepository;
 import com.web.assignment.appointment.repository.redis.RedisRepository;
+import com.web.assignment.appointment.repository.report.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class IndexController {
@@ -25,11 +28,30 @@ public class IndexController {
     @Autowired
     private AppointmentTypeRepository appointmentTypeRepository;
 
+    @Autowired
+    private ReportRepository reportRepository;
+
     @GetMapping
     public String index(Model model) {
         String cache = redisRepository.findById("USER");
         model.addAttribute("loggedin", cache);
         return "index";
+    }
+
+    @GetMapping("report/{id}")
+    public String report(Model model, @PathVariable("id") long id) {
+        String cache1 = redisRepository.findById("USER");
+        Gson gson = new Gson();
+        UserDto userCache = gson.fromJson(cache1, UserDto.class);
+        model.addAttribute("user", userCache);
+        Optional<Report> report = reportRepository.findById(id);
+        if (report.isPresent()) {
+            Report reportObj = report.get();
+            model.addAttribute("report", reportObj);
+        }
+        String cache = redisRepository.findById("USER");
+        model.addAttribute("loggedin", cache);
+        return "report";
     }
 
     @GetMapping("about")
