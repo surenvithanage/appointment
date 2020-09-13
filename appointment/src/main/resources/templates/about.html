@@ -1,27 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ABC Laboratories</title>
+    <title>Mercy Care</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="ABC Laboratories"/>
     <script type="application/x-javascript"> addEventListener("load", function () {
         setTimeout(hideURLbar, 0);
     }, false);
-
     function hideURLbar() {
         window.scrollTo(0, 1);
     } </script>
-
     <link th:href="@{css/bootstrap.css}" rel="stylesheet" type="text/css" media="all"/>
     <link th:href="@{css/style.css}" rel="stylesheet" type="text/css" media="all"/>
-
     <script type="text/javascript" th:src="@{js/jquery-2.1.4.min.js}"></script>
-
     <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap"
           rel="stylesheet">
-
     <script type="text/javascript" th:src="@{js/move-top.js}"></script>
     <script type="text/javascript" th:src="@{js/easing.js}"></script>
     <script type="text/javascript">
@@ -32,12 +27,10 @@
             });
         });
     </script>
-
     <script th:src="@{js/responsiveslides.min.js}"></script>
     <script type="text/javascript" th:src="@{js/numscroller-1.0.js}"></script>
 </head>
 <body>
-
 <div class="header_w3l">
     <div class="container">
         <nav class="navbar navbar-default">
@@ -49,27 +42,26 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <h1><a href="/">ABC<span> Laboratories </span></a></h1>
+                <h1><a href="/">Mercy Care<span> Labs </span></a></h1>
             </div>
-            <!-- top-nav -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/">Home</a></li>
                     <li><a href="about" class="active">About</a></li>
                     <li><a href="treatments">Treatments</a></li>
                     <li><a href="contact">Contact</a></li>
-                    <li><a href="login">Login</a></li>
+                    <li th:if="${loggedin == null}"><a href="login">Login</a></li>
+                    <li th:if="${loggedin != null}"><a href="profile">Profile</a></li>
+                    <li th:if="${loggedin != null}"><a href="appointment">Make an Appointment</a></li>
+                    <li th:if="${loggedin != null}"><a href="logout">Logout</a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
         </nav>
     </div>
 </div>
-
 <div class="banner_w3ls page_head">
-
 </div>
-<!-- //banner -->
 <div class="about all_pad">
     <div class="container">
         <h3 class="title">About</h3>
@@ -155,22 +147,12 @@
         <div class="clearfix"></div>
     </div>
 </div>
-<!-- smooth scrolling -->
 <script type="text/javascript">
     $(document).ready(function () {
-        /*
-            var defaults = {
-            containerID: 'toTop', // fading element id
-            containerHoverID: 'toTopHover', // fading element hover id
-            scrollSpeed: 1200,
-            easingType: 'linear'
-            };
-        */
         $().UItoTop({easingType: 'easeOutQuart'});
     });
 </script>
 <a href="/" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
-<!-- //smooth scrolling -->
 <script type="text/javascript" th:src="@{js/bootstrap-3.1.1.min.js}"></script>
 </body>
 </html>

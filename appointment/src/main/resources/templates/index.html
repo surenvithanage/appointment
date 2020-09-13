@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ABC Laboratories</title>
-    <!-- for-mobile-apps -->
+    <title>Mercy Care</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="keywords" content="ABC Laboratories"/>
@@ -13,23 +12,17 @@
     function hideURLbar() {
         window.scrollTo(0, 1);
     } </script>
-    <!-- //for-mobile-apps -->
     <link th:href="@{css/bootstrap.css}" rel="stylesheet" type="text/css" media="all"/>
     <link th:href="@{css/style.css}" rel="stylesheet" type="text/css" media="all"/>
-    <!-- js -->
     <script type="text/javascript" th:src="@{js/jquery-2.1.4.min.js}"></script>
-    <!-- //js -->
-    <!--animate-->
     <link th:href="@{css/animate.css}" rel="stylesheet" type="text/css" media="all">
     <script th:src="@{js/wow.min.js}"></script>
     <script>
         new WOW().init();
     </script>
-    <!--//end-animate-->
     <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap"
           rel="stylesheet">
-    <!-- start-smoth-scrolling -->
     <script type="text/javascript" th:src="@{js/move-top.js}"></script>
     <script type="text/javascript" th:src="@{js/easing.js}"></script>
     <script type="text/javascript">
@@ -40,11 +33,9 @@
             });
         });
     </script>
-    <!-- start-smoth-scrolling -->
     <script th:src="@{js/responsiveslides.min.js}"></script>
 </head>
 <body>
-<!-- header -->
 <div class="header_w3l">
     <div class="container">
         <nav class="navbar navbar-default">
@@ -56,29 +47,27 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <h1><a href="/">ABC<span> Laboratories </span></a></h1>
+                <h1><a href="/">Mercy Care<span> Labs </span></a></h1>
             </div>
-            <!-- top-nav -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/" class="active">Home</a></li>
                     <li><a href="about" >About</a></li>
                     <li><a href="treatments">Treatments</a></li>
                     <li><a href="contact">Contact</a></li>
-                    <li><a href="login">Login</a></li>
+                    <li th:if="${loggedin == null}"><a href="login">Login</a></li>
+                    <li th:if="${loggedin != null}"><a href="profile">Profile</a></li>
+                    <li th:if="${loggedin != null}"><a href="appointment">Make an Appointment</a></li>
+                    <li th:if="${loggedin != null}"><a href="logout">Logout</a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
         </nav>
     </div>
 </div>
-<!-- header -->
-<!-- banner -->
 <div class="banner_w3ls w3layouts">
     <script>
-        // You can also use "$(window).load(function() {"
         $(function () {
-            // Slideshow 4
             $("#slider3").responsiveSlides({
                 auto: true,
                 pager: true,
@@ -124,8 +113,6 @@
         <div class="clearfix"></div>
     </div>
 </div>
-<!-- //banner -->
-<!-- banner-bottom -->
 <div class="bottom_wthree">
     <div class="col-md-6 bottom-left w3-agileits">
         <figure class="cube-1">
@@ -155,8 +142,6 @@
     </div>
     <div class="clearfix"></div>
 </div>
-<!-- //banner-bottom -->
-<!-- services -->
 <div class="services_agile">
     <div class="container">
         <h3 class="title">Our Best Services</h3>
@@ -186,9 +171,6 @@
         </div>
     </div>
 </div>
-<!-- //services -->
-
-<!-- care -->
 <div class="care_agileits">
     <div class="container">
         <div class="offer agile">
@@ -231,23 +213,12 @@
         </div>
     </div>
 </div>
-
-<!-- smooth scrolling -->
 <script type="text/javascript">
     $(document).ready(function () {
-        /*
-            var defaults = {
-            containerID: 'toTop', // fading element id
-            containerHoverID: 'toTopHover', // fading element hover id
-            scrollSpeed: 1200,
-            easingType: 'linear'
-            };
-        */
         $().UItoTop({easingType: 'easeOutQuart'});
     });
 </script>
-<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
-<!-- //smooth scrolling -->
+<a href="/" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 <script type="text/javascript" th:src="@{js/bootstrap-3.1.1.min.js}"></script>
 </body>
 </html>

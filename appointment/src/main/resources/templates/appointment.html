@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Mercy Care</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="keywords" content="ABC Laboratories"/>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <link th:href="@{css/bootstrap.css}" rel="stylesheet" type="text/css" media="all"/>
+    <link th:href="@{css/style.css}" rel="stylesheet" type="text/css" media="all"/>
+    <script type="text/javascript" th:src="@{js/jquery-2.1.4.min.js}"></script>
+    <link th:href="@{css/animate.css}" rel="stylesheet" type="text/css" media="all">
+    <link th:href="@{css/appointment.css}" rel="stylesheet" type="text/css" media="all">
+    <script th:src="@{js/wow.min.js}"></script>
+    <script>
+        new WOW().init();
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Poiret+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap"
+          rel="stylesheet">
+    <script type="text/javascript" th:src="@{js/move-top.js}"></script>
+    <script type="text/javascript" th:src="@{js/easing.js}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
+                event.preventDefault();
+                $('html,body').animate({scrollTop: $(this.hash).offset().top}, 1000);
+            });
+        });
+    </script>
+    <script th:src="@{js/responsiveslides.min.js}"></script>
+</head>
+<body>
+<!-- header -->
+<div class="header_w3l">
+    <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <h1><a href="/">Mercy Care<span> Labs </span></a></h1>
+            </div>
+            <!-- top-nav -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="about">About</a></li>
+                    <li><a href="treatments">Treatments</a></li>
+                    <li><a href="contact">Contact</a></li>
+                    <li th:if="${loggedin == null}"><a href="login">Login</a></li>
+                    <li th:if="${loggedin != null}"><a href="profile">Profile</a></li>
+                    <li th:if="${loggedin != null}"><a href="appointment">Make an Appointment</a></li>
+                    <li th:if="${loggedin != null}"><a href="logout">Logout</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="container bootstrap snippet">
+    <div class="row" style="margin-top: 50px;">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="well-block">
+                    <div class="well-title">
+                        <h2>Book an Appointment</h2>
+                    </div>
+                    <form th:action="@{/placeappointment}" method="post" th:object="${appointment}">
+                        <!-- Form start -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Name</label>
+                                    <p th:text="${name}"></p>
+                                </div>
+                            </div>
+                            <!-- Text input-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Email</label>
+                                    <p th:text="${email}"></p>
+                                </div>
+                            </div>
+                            <!-- Text input-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" for="date">Preferred Date</label>
+                                    <input id="date"  th:field="*{date}" name="date" type="date" placeholder="Preferred Date" class="form-control input-md">
+                                </div>
+                            </div>
+                            <!-- Select Basic -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" for="time">Preferred Time</label>
+                                    <select id="time"  th:field="*{time}" name="time" class="form-control">
+                                        <option value="8:00 to 9:00">8:00 to 9:00</option>
+                                        <option value="9:00 to 10:00">9:00 to 10:00</option>
+                                        <option value="10:00 to 1:00">10:00 to 1:00</option>
+                                        <option value="2:00 to 3:00">2:00 to 3:00</option>
+                                        <option value="4:00 to 5:30">4:00 to 5:30</option>
+                                        <option value="6:00 to 8:00">6:00 to 8:00</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" >Doctor Name</label>
+                                    <input th:field="*{doctor}" name="doctor" type="text" placeholder="Name of Doctor" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" for="hospital">Channelled Hospital</label>
+                                    <input id="hospital"  th:field="*{hospital}" name="hospital" type="text" placeholder="Name of Hospital" class="form-control input-md">
+                                </div>
+                            </div>
+                            <!-- Select Basic -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="appointmentfor">Appointment Type</label>
+                                    <select id="appointmentfor" th:field="*{appointmentTypeId}" name="appointmentfor" class="form-control">
+                                        <option th:each="g : ${appointmentTypeList}" th:value="${g.id}" th:text="${g.name}" />
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" for="appointmentfor">Payment Type</label>
+                                    <select th:field="*{type}" class="form-control">
+                                        <option th:each="g : ${listPayment}" th:value="${g}" th:text="${g}" />
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" >Card Number</label>
+                                    <input th:field="*{cardnumber}" name="cardnumber" type="text" placeholder="Card Number" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" >CVV</label>
+                                    <input th:field="*{cvv}" name="cvv" type="text" placeholder="CVV" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" >Pin</label>
+                                    <input th:field="*{pin}" name="pin" type="text" placeholder="PIN" class="form-control input-md">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label" >Amount</label>
+                                    <input th:field="*{amount}" name="amount" type="text" readonly="true" placeholder="Amount" class="form-control input-md">
+                                </div>
+                            </div>
+                            <!-- Button -->
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-default">Make An Appointment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- form end -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="well-block">
+                    <div class="well-title">
+                        <h2>Why Place An Appointment with Us</h2>
+                    </div>
+                    <div class="feature-block">
+                        <div class="feature feature-blurb-text">
+                            <h4 class="feature-title">24/7 Hours Available</h4>
+                            <div class="feature-content">
+                                <p>Mercy care labs will provide you the best 24/7 services.</p>
+                            </div>
+                        </div>
+                        <div class="feature feature-blurb-text" style="margin-top: 25px;">
+                            <h4 class="feature-title">Experienced Staff Available</h4>
+                            <div class="feature-content">
+                                <p>We have excellent staff members which will handle all your payments properly therefore you do not need to worry about any delays regarding the appointments which are being placed here. </p>
+                            </div>
+                        </div>
+                        <div class="feature feature-blurb-text"  style="margin-top: 25px;">
+                            <h4 class="feature-title">Low Price & Fees</h4>
+                            <div class="feature-content">
+                                <p>We provide the best services for the lowest price.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $().UItoTop({easingType: 'easeOutQuart'});
+    });
+</script>
+<a href="/" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+<script type="text/javascript" th:src="@{js/bootstrap-3.1.1.min.js}"></script>
+</body>
+</html>
