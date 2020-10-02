@@ -1,9 +1,8 @@
 package com.web.assignment.appointment.controller.authentication;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.web.assignment.appointment.mapping.Session;
 import com.web.assignment.appointment.mapping.User;
-import com.web.assignment.appointment.repository.redis.RedisRepository;
+import com.web.assignment.appointment.repository.session.CacheRepository;
 import com.web.assignment.appointment.service.authentication.AuthenticationService;
 import com.web.assignment.appointment.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.Optional;
 
 @Controller
 public class AuthenticateController {
@@ -25,22 +25,25 @@ public class AuthenticateController {
     private EmailService emailService;
 
     @Autowired
-    private RedisRepository redisRepository;
+    private CacheRepository cacheRepository;
 
     @PostMapping("authenticate")
     public String authentication(Model model, @ModelAttribute("user") User user) {
         User userInfo = authenticationService.authenticateUser(user);
         if (userInfo != null) {
-            ObjectMapper Obj = new ObjectMapper();
-            String jsonStr;
-            try {
-                jsonStr = Obj.writeValueAsString(userInfo);
-                redisRepository.save("USER", jsonStr);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
+            Optional<Session> session = cacheRepository.findById((long) 1);
+            if (!session.isPresent()) {
+                Session userSession = new Session();
+                userSession.setId(1);
+                userSession.setUser(userInfo);
+                cacheRepository.save(userSession);
             }
-            String cache = redisRepository.findById("USER");
-            model.addAttribute("loggedin", cache);
+            Optional<Session> sessionUser = cacheRepository.findById((long) 1);
+            if (sessionUser.isPresent()) {
+                model.addAttribute("loggedin", sessionUser);
+            } else {
+                model.addAttribute("loggedin", null);
+            }
             return "index";
         } else {
             model.addAttribute("key", "Invalid Credentials");

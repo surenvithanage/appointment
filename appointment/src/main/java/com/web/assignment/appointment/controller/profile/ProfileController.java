@@ -1,15 +1,10 @@
 package com.web.assignment.appointment.controller.profile;
 
-import com.google.gson.Gson;
-import com.web.assignment.appointment.dto.UserDto;
-import com.web.assignment.appointment.mapping.Appointment;
-import com.web.assignment.appointment.mapping.Payment;
-import com.web.assignment.appointment.mapping.Report;
-import com.web.assignment.appointment.mapping.User;
+import com.web.assignment.appointment.mapping.*;
 import com.web.assignment.appointment.repository.appointment.AppointmentRepository;
 import com.web.assignment.appointment.repository.payment.PaymentRepository;
-import com.web.assignment.appointment.repository.redis.RedisRepository;
 import com.web.assignment.appointment.repository.report.ReportRepository;
+import com.web.assignment.appointment.repository.session.CacheRepository;
 import com.web.assignment.appointment.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,7 +21,7 @@ public class ProfileController {
     private UserRepository userRepository;
 
     @Autowired
-    private RedisRepository redisRepository;
+    private CacheRepository cacheRepository;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -40,13 +35,15 @@ public class ProfileController {
     @GetMapping("profile")
     public String profile(Model model) {
         User user = new User();
-        String cache = redisRepository.findById("USER");
-        Gson gson = new Gson();
-        UserDto userCache = gson.fromJson(cache, UserDto.class);
+        User userCache = null;
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            userCache = optionalSession.get().getUser();
+        }
         long reportlist1 = 0;
         long appointmentlist1 = 0;
         Optional<User> userList = userRepository.findById(userCache.getId());
-        if(userList.isPresent()) {
+        if (userList.isPresent()) {
             user = userList.get();
             List<Appointment> appointmentList = appointmentRepository.appointmentList(user.getId());
             List<Report> reportList = reportRepository.reportList(user.getId());
@@ -57,7 +54,7 @@ public class ProfileController {
             model.addAttribute("appointmentList", appointmentList);
             model.addAttribute("reportList", reportList);
         }
-        model.addAttribute("loggedin", cache);
+        model.addAttribute("loggedin", userCache);
         model.addAttribute("user", user);
         model.addAttribute("userId", user.getId());
         model.addAttribute("appointmentcount", appointmentlist1);

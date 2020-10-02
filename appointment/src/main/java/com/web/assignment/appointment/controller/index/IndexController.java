@@ -1,14 +1,13 @@
 package com.web.assignment.appointment.controller.index;
 
-import com.google.gson.Gson;
 import com.web.assignment.appointment.dto.AppointmentDto;
-import com.web.assignment.appointment.dto.UserDto;
 import com.web.assignment.appointment.mapping.AppointmentType;
 import com.web.assignment.appointment.mapping.Report;
+import com.web.assignment.appointment.mapping.Session;
 import com.web.assignment.appointment.mapping.User;
 import com.web.assignment.appointment.repository.appointment.AppointmentTypeRepository;
-import com.web.assignment.appointment.repository.redis.RedisRepository;
 import com.web.assignment.appointment.repository.report.ReportRepository;
+import com.web.assignment.appointment.repository.session.CacheRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,71 +22,95 @@ import java.util.Optional;
 public class IndexController {
 
     @Autowired
-    private RedisRepository redisRepository;
-
-    @Autowired
     private AppointmentTypeRepository appointmentTypeRepository;
 
     @Autowired
     private ReportRepository reportRepository;
 
+    @Autowired
+    private CacheRepository cacheRepository;
+
     @GetMapping
     public String index(Model model) {
-        String cache = redisRepository.findById("USER");
-        model.addAttribute("loggedin", cache);
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            model.addAttribute("loggedin", optionalSession.get().getUser());
+        } else {
+            model.addAttribute("loggedin", null);
+        }
         return "index";
     }
 
     @GetMapping("report/{id}")
     public String report(Model model, @PathVariable("id") long id) {
-        String cache1 = redisRepository.findById("USER");
-        Gson gson = new Gson();
-        UserDto userCache = gson.fromJson(cache1, UserDto.class);
-        model.addAttribute("user", userCache);
+        User user;
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            user = optionalSession.get().getUser();
+            model.addAttribute("user", user);
+            model.addAttribute("loggedin", user);
+        } else {
+            model.addAttribute("user", null);
+            model.addAttribute("loggedin", null);
+        }
         Optional<Report> report = reportRepository.findById(id);
         if (report.isPresent()) {
             Report reportObj = report.get();
             model.addAttribute("report", reportObj);
         }
-        String cache = redisRepository.findById("USER");
-        model.addAttribute("loggedin", cache);
         return "report";
     }
 
     @GetMapping("about")
     public String about(Model model) {
-        String cache = redisRepository.findById("USER");
-        model.addAttribute("loggedin", cache);
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            model.addAttribute("loggedin", optionalSession.get().getUser());
+        } else {
+            model.addAttribute("loggedin", null);
+        }
         return "about";
     }
 
     @GetMapping("contact")
     public String contact(Model model) {
-        String cache = redisRepository.findById("USER");
-        model.addAttribute("loggedin", cache);
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            model.addAttribute("loggedin", optionalSession.get().getUser());
+        } else {
+            model.addAttribute("loggedin", null);
+        }
         return "contact";
     }
 
     @GetMapping("treatments")
     public String treatments(Model model) {
-        String cache = redisRepository.findById("USER");
-        model.addAttribute("loggedin", cache);
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            model.addAttribute("loggedin", optionalSession.get().getUser());
+        } else {
+            model.addAttribute("loggedin", null);
+        }
         return "treatments";
     }
 
     @GetMapping("appointment")
     public String appointment(Model model) {
         AppointmentDto appointment = new AppointmentDto();
-        String cache = redisRepository.findById("USER");
-        Gson gson = new Gson();
-        UserDto userCache = gson.fromJson(cache, UserDto.class);
-        model.addAttribute("loggedin", cache);
-        appointment.setUserId(userCache.getId());
+        User user = null;
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            model.addAttribute("loggedin", optionalSession.get().getUser());
+            user = optionalSession.get().getUser();
+        } else {
+            model.addAttribute("loggedin", null);
+        }
+        appointment.setUserId(user.getId());
         appointment.setAmount("2250");
         model.addAttribute("appointment", appointment);
-        model.addAttribute("id", userCache.getId());
-        model.addAttribute("name", userCache.getFname());
-        model.addAttribute("email", userCache.getEmail());
+        model.addAttribute("id", user.getId());
+        model.addAttribute("name", user.getFname());
+        model.addAttribute("email", user.getEmail());
         List<AppointmentType> appointmentTypeList = appointmentTypeRepository.findAll();
         model.addAttribute("appointmentTypeList", appointmentTypeList);
         List<String> listPayment = Arrays.asList("VISA", "MASTER", "AMEX");
@@ -114,9 +137,11 @@ public class IndexController {
 
     @GetMapping("logout")
     public String logout(Model model) {
-        redisRepository.save("USER", null);
-        String cache = redisRepository.findById("USER");
-        model.addAttribute("loggedin", cache);
+        Optional<Session> optionalSession = cacheRepository.findById((long) 1);
+        if (optionalSession.isPresent()) {
+            model.addAttribute("loggedin", null);
+            cacheRepository.save(null);
+        }
         return "index";
     }
 }
