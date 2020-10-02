@@ -140,7 +140,7 @@ public class IndexController {
         Optional<Session> optionalSession = cacheRepository.findById((long) 1);
         if (optionalSession.isPresent()) {
             model.addAttribute("loggedin", null);
-            cacheRepository.save(null);
+            cacheRepository.deleteById((long) 1);
         }
         return "index";
     }
