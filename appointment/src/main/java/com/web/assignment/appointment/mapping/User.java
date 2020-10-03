@@ -35,6 +35,16 @@ public class User {
     @UpdateTimestamp
     private Date lastModifiedDate;
 
+    public User() {
+    }
+
+    public User(String fname, String lname, String phoneno, String email) {
+        this.fname = fname;
+        this.lname = lname;
+        this.phoneno = phoneno;
+        this.email = email;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
